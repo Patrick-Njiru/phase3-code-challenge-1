@@ -3,7 +3,7 @@ class Magazine
 
   @@all = []
   # @@contributors = []
-  def initialize(name, category)
+  def initialize(name:, category:)
     @name = name
     @category = category
     @@all << self
