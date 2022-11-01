@@ -12,8 +12,7 @@ class Author
   end
 
   def magazines
-    Article.all.select{ |obj| @name == obj.author.name ? obj : nil}
-    .map{ |article| article.magazine }.uniq
+    articles.map{ |article| article.magazine }.uniq
   end
 
   def add_article(magazine, title)
