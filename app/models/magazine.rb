@@ -30,8 +30,9 @@ class Magazine
   end
 
   def contributing_authors
-    Article.all.filter { |obj| @name == obj.magazine.name ? obj.title : nil }
+    contributing_authors_array = Article.all.filter { |obj| @name == obj.magazine.name ? obj.title : nil }
     .map { |article| article.author.name }
+    contributing_authors_array.length > 2 ? contributing_authors : nil
   end
 
 end
