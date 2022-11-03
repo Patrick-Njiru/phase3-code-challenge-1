@@ -8,7 +8,7 @@ class Author
   end
 
   def articles
-    Article.all.select { |article| @name == article.author.name ? article : nil }
+    Article.all.select { |article| @name == article.author.name }
   end
 
   def magazines

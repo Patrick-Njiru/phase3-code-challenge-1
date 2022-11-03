@@ -6,8 +6,8 @@ class Magazine
   @@all = []
 
   def initialize(name:, category:)
-    name.class == String ? @name = name : @name = "Not a string!"
-    category.class == String ? @category = category : @category = "Not a string!"
+    name.class == String ? @name = name : @name = nil
+    category.class == String ? @category = category : @category = nil
     @@all << self
   end
 
@@ -29,13 +29,13 @@ class Magazine
 
   def contributing_authors
     contributors.map { |author| author.name }.tally
-    .filter{ |key, value| value.to_i >= 3 ? key : nil }.to_a
-    .map { |nested_array| nested_array[0]}
+    .filter{ |key, value| value.to_i >= 3 }.to_a
+    .map { |nested_array| nested_array[0] }
   end
 
   private
 
   def contributors_articles
-    Article.all.find_all { |article| @name == article.magazine.name ? article : nil}
+    Article.all.find_all { |article| @name == article.magazine.name }
   end
 end
