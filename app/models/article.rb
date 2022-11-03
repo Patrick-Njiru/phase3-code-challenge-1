@@ -6,10 +6,10 @@ class Article
 
     @@all = []
 
-    def initialize(author:, magazine:, title:)
-        @author = Author.new(author)
-        @magazine = Magazine.new(**magazine)
-        @title = title
+    def initialize( author:, magazine:, title:)
+        author.class == Author ? @author = author : @author = "Not an Author Object!"
+        magazine.class == Magazine ? @magazine = magazine : @magazine = "Not a Magazine Object!"       
+        title.class == String ? @title = title : @title = "Not a string!"
         @@all << self
     end
 

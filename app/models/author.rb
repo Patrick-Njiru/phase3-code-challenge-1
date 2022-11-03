@@ -8,7 +8,7 @@ class Author
   end
 
   def articles
-    Article.all.select { |obj| @name == obj.author.name ? obj : nil }
+    Article.all.select { |article| @name == article.author.name ? article : nil }
   end
 
   def magazines
@@ -16,12 +16,11 @@ class Author
   end
 
   def add_article(magazine, title)
-    Article.new(author: @name, magazine: magazine, title: title )
+    Article.new(author: self, magazine: magazine, title: title )
   end
 
   def topic_areas
-    Article.all.select { |obj| @name == obj.author.name ? obj.magazine.category : nil}
-    .map{ |article| article.magazine.category}.uniq
+    magazines.map{ |magazine| magazine.category }
   end
 
 end

@@ -1,7 +1,7 @@
 # Please copy/paste all three classes into this file to submit your solution!
 
 class Author
-    
+
   attr_reader :name
 
   def initialize(name)
@@ -9,24 +9,23 @@ class Author
   end
 
   def articles
-    Article.all.select { |obj| @name == obj.author.name ? obj : nil }
+    Article.all.select { |article| @name == article.author.name}
   end
 
   def magazines
-    Article.all.select{ |obj| @name == obj.author.name ? obj : nil}
-    .map{ |article| article.magazine }.uniq
+    articles.map{ |article| article.magazine }.uniq
   end
 
-  def add_article(magazine:, title:)
-    Article.new(author: @name, magazine: magazine, title: title )
+  def add_article(magazine, title)
+    Article.new(author: self, magazine: magazine, title: title )
   end
 
   def topic_areas
-    Article.all.select { |obj| @name == obj.author.name ? obj.magazine.category : nil}
-    .map{ |article| article.magazine.category}.uniq
+    magazines.map{ |magazine| magazine.category }
   end
 
 end
+
 
 class Magazine
 
@@ -35,8 +34,8 @@ class Magazine
   @@all = []
 
   def initialize(name:, category:)
-    @name, @category = name, category
-    # @category = category
+    name.class == String ? @name = name : @name = "Not a string!"
+    category.class == String ? @category = category : @category = "Not a string!"
     @@all << self
   end
 
@@ -45,8 +44,7 @@ class Magazine
   end
 
   def contributors
-  Article.all.find_all { |obj| @name == obj.magazine.name ? obj.author : nil}
-  .map{ |article| article.author} 
+    self.contributors_articles.map{ |article| article.author }
   end
 
   def self.find_by_name(name)
@@ -54,33 +52,38 @@ class Magazine
   end
 
   def article_titles
-    Article.all.filter { |obj| @name == obj.magazine.name ? obj.title : nil }
-    .map { |article| article.title }
+    self.contributors_articles.map{ |article| article.title }
   end
 
   def contributing_authors
-    contributing_authors = Article.all.filter { |obj| @name == obj.magazine.name ? obj.title : nil }
-    .map { |article| article.author.name }
-    contributing_authors.length > 2 ? contributing_authors : nil
+    contributors.map { |author| author.name }.tally
+    .filter{ |key, value| value.to_i >= 3 ? key : nil }.to_a
+    .map { |nested_array| nested_array[0]}
   end
 
+  private
+
+  def contributors_articles
+    Article.all.find_all { |article| @name == article.magazine.name }
+  end
 end
+
 
 class Article
 
-    attr_reader :title, :author, :magazine
+  attr_reader :title, :author, :magazine
 
-    @@all = []
+  @@all = []
 
-    def initialize(author:, magazine:, title:)
-        @author = Author.new(author)
-        @magazine = Magazine.new(**magazine)
-        @title = title
-        @@all << self
-    end
+  def initialize( author:, magazine:, title:)
+      author.class == Author ? @author = author : @author = "Not an Author Object!"
+      magazine.class == Magazine ? @magazine = magazine : @magazine = "Not a Magazine Object!"       
+      title.class == String ? @title = title : @title = "Not a string!"
+      @@all << self
+  end
 
-    def self.all
-        @@all
-    end
+  def self.all
+      @@all
+  end
 
 end
